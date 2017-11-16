@@ -30,7 +30,12 @@ uint8_t AVR_I2C_action(uint8_t action)
   return (TWSR & 0xF8);
 }
 
-void AVR_I2C_data(uint8_t data)
+void AVR_I2C_setData(uint8_t data)
 {
   TWDR = data;
+}
+
+uint8_t AVR_I2C_getData(void)
+{
+  return TWDR;
 }

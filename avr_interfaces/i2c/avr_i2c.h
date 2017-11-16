@@ -27,4 +27,5 @@
 
 void AVR_I2C_init(void);
 uint8_t AVR_I2C_action(uint8_t action);
-void AVR_I2C_data(uint8_t data);
+void AVR_I2C_setData(uint8_t data);
+uint8_t AVR_I2C_getData(void);
