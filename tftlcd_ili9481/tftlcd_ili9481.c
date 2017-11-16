@@ -8,11 +8,11 @@ uint8_t fontSizeX_px,
 		fontOffset,
 		fontCharnums;
 
-void TFTLCD_ILI9481_preset(void) 
+void TFTLCD_ILI9481_preset(void)
 {
 	DATA_DDR = 0xFF;
  	DATA_PORT = 0x00;
-	
+
  	COMMAND_DDR_1 |= (1 << RST) | (1 << RS) | (1 << WR) | (1 << RD);
  	COMMAND_DDR_2 |= (1 << CS);
 
@@ -62,7 +62,7 @@ void TFTLCD_ILI9481_write8(uint8_t byte)
 	WR_STROBE;
 }
 
-void TFTLCD_ILI9481_reg_write32(uint8_t reg, uint32_t data) 
+void TFTLCD_ILI9481_reg_write32(uint8_t reg, uint32_t data)
 {
 	CS_ACTIVE;
 	CD_COMM;
@@ -87,11 +87,11 @@ uint8_t TFTLCD_ILI9481_read8()
 	_delay_us(10);
 	x = DATA_PIN;
 	RD_IDLE;
-	
+
 	return x;
 }
 
-uint16_t TFTLCD_ILI9481_read_id() 
+uint16_t TFTLCD_ILI9481_read_id()
 {
 	uint16_t id;
 
@@ -99,7 +99,7 @@ uint16_t TFTLCD_ILI9481_read_id()
 	CD_COMM;
 	TFTLCD_ILI9481_write8(DEVICE_CODE_READ);
 	WR_STROBE;
-	
+
 	setDataPortReadMode();
 	CD_DATA;
 	_delay_us(50);
@@ -123,9 +123,9 @@ uint16_t TFTLCD_ILI9481_init(void)
 	TFTLCD_ILI9481_preset();
 	TFTLCD_ILI9481_reset();
 	_delay_ms(750);
-	
+
 	uint16_t id = TFTLCD_ILI9481_read_id();
-	
+
 	TFTLCD_ILI9481_reset();
 
 	TFTLCD_ILI9481_write_command(EXIT_SLEEP_MODE);
@@ -205,7 +205,7 @@ void TFTLCD_ILI9481_set_rotation(uint8_t rotation) {
 	}
 }
 
-// Графические функции
+// Graphical functions
 void TFTLCD_ILI9481_graph_flood(uint16_t color, uint32_t len)
 {
 	uint16_t blocks;
@@ -321,7 +321,7 @@ void TFTLCD_ILI9481_graph_draw_horiz_line(int16_t x, int16_t y, int16_t len, uin
 {
 	int16_t x2;
 
-	if (len <= 0 || y < 0 || y >= y_size || x >= x_size || 
+	if (len <= 0 || y < 0 || y >= y_size || x >= x_size ||
 	(x2 = (x + len - 1)) <  0) return;
 
 	if(x < 0) {
@@ -345,12 +345,12 @@ void TFTLCD_ILI9481_graph_draw_vert_line(int16_t x, int16_t y, int16_t len, uint
 
 	if ((len <= 0) || (x < 0 ) || ( x >= x_size) ||
 	(y >= y_size) || ((y2 = (y+ len - 1)) < 0)) return;
-	
+
 	if (y < 0) {
 		len += y;
 		y = 0;
 	}
-	
+
 	if (y2 >= y_size) {
 		y2 = y_size - 1;
 		len = y2 - y + 1;
@@ -361,7 +361,7 @@ void TFTLCD_ILI9481_graph_draw_vert_line(int16_t x, int16_t y, int16_t len, uint
 	TFTLCD_ILI9481_graph_set_draw_window(0, 0, x_size - 1, y_size - 1);
 }
 
-void TFTLCD_ILI9481_graph_draw_circle(int16_t x0, int16_t y0, int16_t r, uint16_t color) 
+void TFTLCD_ILI9481_graph_draw_circle(int16_t x0, int16_t y0, int16_t r, uint16_t color)
 {
 	int16_t f = 1 - r;
 	int16_t ddF_x = 1;
@@ -383,7 +383,7 @@ void TFTLCD_ILI9481_graph_draw_circle(int16_t x0, int16_t y0, int16_t r, uint16_
 		x++;
 		ddF_x += 2;
 		f += ddF_x;
-		
+
 		TFTLCD_ILI9481_graph_draw_pixel(x0 + x, y0 + y, color);
 		TFTLCD_ILI9481_graph_draw_pixel(x0 - x, y0 + y, color);
 		TFTLCD_ILI9481_graph_draw_pixel(x0 + x, y0 - y, color);
@@ -403,7 +403,7 @@ void TFTLCD_ILI9481_graph_draw_rect(uint16_t x1, uint16_t y1, uint16_t x2, uint1
 	TFTLCD_ILI9481_graph_draw_vert_line(x2, y1, y2 - y1, color);
 }
 
-void TFTLCD_ILI9481_graph_draw_triang(int16_t x0, int16_t y0,int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color) 
+void TFTLCD_ILI9481_graph_draw_triang(int16_t x0, int16_t y0,int16_t x1, int16_t y1, int16_t x2, int16_t y2, uint16_t color)
 {
 	TFTLCD_ILI9481_graph_draw_line(x0, y0, x1, y1, color);
 	TFTLCD_ILI9481_graph_draw_line(x1, y1, x2, y2, color);
@@ -444,7 +444,7 @@ void TFTLCD_ILI9481_graph_print_char(int16_t x, int16_t y, unsigned char c, uint
 	int temp = ((c - fontOffset) * ((fontSizeX_px / 8) * fontSizeY_px)) + 4,
 		p = 0;
 	for (int j = 0; j < ((fontSizeX_px / 8) * fontSizeY_px); j++) {
-		
+
 		unsigned char ch = pgm_read_byte(&fontText1[temp]);
 		switch (typeFont) {
 			case 1:
@@ -497,12 +497,12 @@ uint16_t TFTLCD_ILI9481_graph_print_str_format(int16_t x, int16_t y, char *str, 
 		for (int i = 0; i < len; i++) {
 			TFTLCD_ILI9481_graph_print_char(x + (i * fontSizeX_px), y, *str++, color, bg, typeFont);
 		}
-		
+
 		if (len != prevLen && prevLen != 0) {
 		    uint16_t step = abs(prevLen - len);
 			TFTLCD_ILI9481_graph_fill_rect(x + (len*fontSizeX_px), y, x + (len*fontSizeX_px) + (step*fontSizeX_px), y + fontSizeY_px, bg);
 		}
-				
+
 	} else {
 		 for (int i = 0; i < len; i++) *str++;
 		 *str--;
@@ -515,7 +515,7 @@ uint16_t TFTLCD_ILI9481_graph_print_str_format(int16_t x, int16_t y, char *str, 
 			TFTLCD_ILI9481_graph_fill_rect(x - ((len-1)*fontSizeX_px) - (step*fontSizeX_px), y, x - ((len-1)*fontSizeX_px), y + fontSizeY_px, bg);
 		}
 	}
-	
+
 	return len;
 }
 
@@ -528,7 +528,7 @@ void TFTLCD_ILI9481_graph_print_int(int32_t num, int16_t x, int16_t y, uint16_t 
 
 	uint8_t neg = 0;
 	int c = 0, f = 0;
-	
+
 	if (num == 0) {
 		if (length != 0) {
 			for (c = 0; c < (length - 1); c++)
@@ -544,18 +544,18 @@ void TFTLCD_ILI9481_graph_print_int(int32_t num, int16_t x, int16_t y, uint16_t 
 			neg = 1;
 			num = -num;
 		}
-		
+
 		while (num > 0) {
 			buf[c]= 48 + (num % 10);
 			c++;
 			num = (num - (num % 10)) / 10;
 		}
 		buf[c] = 0;
-		
+
 		if (neg == 1) {
 			st[0] = 45;
 		}
-		
+
 		if (length > (c + neg)) {
 			for (int i = 0; i < (length - c - neg); i++) {
 				st[i + neg] = filler;
@@ -582,7 +582,7 @@ uint16_t TFTLCD_ILI9481_graph_print_int_format(int32_t num, int16_t x, int16_t y
 
 	uint8_t neg = 0;
 	int c = 0, f = 0;
-	
+
 	if (num == 0) {
 		if (length != 0) {
 			for (c = 0; c < (length - 1); c++)
@@ -598,18 +598,18 @@ uint16_t TFTLCD_ILI9481_graph_print_int_format(int32_t num, int16_t x, int16_t y
 			neg = 1;
 			num = -num;
 		}
-		
+
 		while (num > 0) {
 			buf[c]= 48 + (num % 10);
 			c++;
 			num = (num - (num % 10)) / 10;
 		}
 		buf[c] = 0;
-		
+
 		if (neg == 1) {
 			st[0] = 45;
 		}
-		
+
 		if (length > (c + neg)) {
 			for (int i = 0; i < (length - c - neg); i++) {
 				st[i + neg] = filler;
@@ -627,73 +627,48 @@ uint16_t TFTLCD_ILI9481_graph_print_int_format(int32_t num, int16_t x, int16_t y
 	return TFTLCD_ILI9481_graph_print_str_format(x, y, st, color, bg, typeFont, prevLen, leftOrRight);
 }
 
-uint16_t TFTLCD_ILI9481_graph_print_float_format(double num, uint8_t accuracy, int16_t x, int16_t y, uint16_t color, uint16_t bg, uint8_t typeFont, uint16_t prevLen, uint8_t leftOrRight)
+uint16_t TFTLCD_ILI9481_graph_print_float(double num, uint8_t dec, int16_t x, int16_t y, uint16_t color, uint16_t bg, uint8_t typeFont, uint16_t prevLen, uint8_t leftOrRight)
 {
-	if (accuracy == 0) accuracy = 1;
+	int length = 0;
+	char filler = ' ', divider = '.';
 
-	double dummy;
-	int32_t dec = (int32_t) num;
-	int32_t fract = abs(round(modf(num, &dummy) * pow(10, accuracy)));
-	uint8_t zeroCount = 0;
+	char st[27];
+	uint8_t neg=0;
 
-	if (fract != 0) {
-		double n = num - dec;
-		n *= 10;
-		while ((uint32_t) n == 0) {
-			zeroCount++;
-			n *= 10;
-		}
-	} else {
-		zeroCount = accuracy - 1;
+	if (dec<1)
+	dec=1;
+	else if (dec>5)
+	dec=5;
+
+	if (num<0)
+	neg = 1;
+
+	dtostrf(num, length, dec, st);
+	if (divider != '.')
+	{
+		for (int i=0; i<sizeof(st); i++)
+		if (st[i]=='.')
+		st[i]=divider;
 	}
 
-	if (fract == 1*pow(10, accuracy-1)) zeroCount = 0;
-
-	if (zeroCount >= accuracy) {
-		zeroCount = accuracy - 1;
-	}
-
-	uint16_t len = TFTLCD_ILI9481_getCountCharsInNum(dec) + TFTLCD_ILI9481_getCountCharsInNum(fract) + 1 + zeroCount;
-
-	if (leftOrRight == 0) {
-		if (num < 0 && dec == 0) {
-			TFTLCD_ILI9481_graph_print_char(x, y, '-', color, bg, typeFont);
-			x += fontSizeX_px;
+	if (filler != ' ')
+	{
+		if (neg)
+		{
+			st[0]='-';
+			for (int i=1; i<sizeof(st); i++)
+			if ((st[i]==' ') || (st[i]=='-'))
+			st[i]=filler;
 		}
-		TFTLCD_ILI9481_graph_print_int(dec, x, y, color, bg, typeFont);
-		x += TFTLCD_ILI9481_getCountCharsInNum(dec)*fontSizeX_px;
-		TFTLCD_ILI9481_graph_print_char(x, y, '.', color, bg, typeFont);
-		x += fontSizeX_px;
-		for (int i = 0; i < zeroCount; i++) {
-			TFTLCD_ILI9481_graph_print_char(x, y, '0', color, bg, typeFont);
-			x += fontSizeX_px;
-		}
-		TFTLCD_ILI9481_graph_print_int(fract, x, y, color, bg, typeFont);
-		if (prevLen != len && prevLen != 0) {
-			uint16_t step = abs(prevLen - len);
-			TFTLCD_ILI9481_graph_fill_rect(x + (TFTLCD_ILI9481_getCountCharsInNum(fract)*fontSizeX_px), y, x + (TFTLCD_ILI9481_getCountCharsInNum(fract)*fontSizeX_px) + (step*fontSizeX_px), y + fontSizeY_px, bg);
-		}
-	} else {
-		TFTLCD_ILI9481_graph_print_int_format(fract, x, y, color, bg, typeFont, 0, 1);
-		x -= TFTLCD_ILI9481_getCountCharsInNum(fract)*fontSizeX_px;
-		for (int i = 0; i < zeroCount; i++) {
-			TFTLCD_ILI9481_graph_print_char(x, y, '0', color, bg, typeFont);
-			x -= fontSizeX_px;
-		}
-		TFTLCD_ILI9481_graph_print_char(x, y, '.', color, bg, typeFont);
-		x -= fontSizeX_px;
-		TFTLCD_ILI9481_graph_print_int_format(dec, x, y, color, bg, typeFont, 0, 1);
-		if (num < 0 && dec == 0) {
-			x -= fontSizeX_px;
-			TFTLCD_ILI9481_graph_print_char(x, y, '-', color, bg, typeFont);
-		}
-		if (prevLen != len && prevLen != 0) {
-			uint16_t step = abs(prevLen - len);
-			TFTLCD_ILI9481_graph_fill_rect(x - ((TFTLCD_ILI9481_getCountCharsInNum(dec)-1)*fontSizeX_px) - (step*fontSizeX_px), y, x - ((TFTLCD_ILI9481_getCountCharsInNum(dec)-1)*fontSizeX_px), y + fontSizeY_px, bg);
+		else
+		{
+			for (int i=0; i<sizeof(st); i++)
+			if (st[i]==' ')
+			st[i]=filler;
 		}
 	}
 
-	return len;
+	return TFTLCD_ILI9481_graph_print_str_format(x, y, st, color, bg, typeFont, prevLen, leftOrRight);
 }
 
 uint8_t TFTLCD_ILI9481_getCountCharsInNum(int32_t num) {
@@ -711,7 +686,7 @@ uint16_t TFTLCD_ILI9481_getFontXpx(void)
 	return fontSizeX_px;
 }
 
-uint16_t TFTLCD_ILI9481_getFontYpx(void) 
+uint16_t TFTLCD_ILI9481_getFontYpx(void)
 {
 	return fontSizeY_px;
 }

@@ -9,14 +9,14 @@
 #include <stdlib.h>
 #include <avr/pgmspace.h>
 
-// Типы шрифтов
+// Fonts
 #define FONT_TYPE_1 1
 #define FONT_TYPE_2 2
 #define FONT_TYPE_3 3
 #define FONT_TYPE_4 4
 #define FONT_TYPE_5 5
 
-// Выравнивание вывода символов по левой или правой стороне
+// Gravity printing: lefr or right
 #define PRINT_DIR_LEFT_TO_RIGHT 0
 #define PRINT_DIR_RIGHT_TO_LEFT 1
 
@@ -323,32 +323,31 @@ static const unsigned char fontSens[4564] PROGMEM = {
 	0x00,0x00,0x00,0x00,0x00,0x02,0x00,0x06,0x00,0x06,0x00,0x06,0x00,0x06,0x00,0x06,0x00,0x06,0x00,0x06,0x00,0x02,0x3E,0x7C,0x3E,0x7C,0x40,0x00,0x60,0x00,0x60,0x00,0x60,0x00,0x60,0x00,0x60,0x00,0x60,0x00,0x60,0x00,0x40,0x00,0x00,0x00,0x00,0x00,  // ~
 };
 
-// Идентификатор дисплея
+// display id
 #define DEVICE_ID 0x9481
 
-// Ширина и высота дисплея в пикселях
+// width and height display
 #define DISP_WIDTH	320
 #define DISP_HEIGHT 480
 
-// Определения пинов и портов МК для подключения дисплея
-
-// Atmega32A
+// Define pins and ports for display
+// --Atmega32A
 // #define DATA_DDR     DDRB
 // #define DATA_PORT    PORTB
 // #define DATA_PIN     PINB
-// 
+//
 // #define COMMAND_DDR_1  DDRD
 // #define COMMAND_PORT_1 PORTD
 // #define RST 4
 // #define RS  5
 // #define WR  6
 // #define RD  7
-// 
+//
 // #define COMMAND_DDR_2  DDRA
 // #define COMMAND_PORT_2 PORTA
 // #define CS  7
 
-// Atmega328P
+// --Atmega328P
 #define DATA_DDR     DDRD
 #define DATA_PORT    PORTD
 #define DATA_PIN     PIND
@@ -360,11 +359,10 @@ static const unsigned char fontSens[4564] PROGMEM = {
 #define WR  2
 #define RD  3
 
-#define COMMAND_DDR_2  DDRC
-#define COMMAND_PORT_2 PORTC
-#define CS  4
+#define COMMAND_DDR_2  DDRB
+#define COMMAND_PORT_2 PORTB
+#define CS  0
 
-// Макросы
 #define swap(a, b) { int16_t t = a; a = b; b = t; }
 
 #define RST_IDLE   COMMAND_PORT_1 |= (1 << RST)
@@ -383,68 +381,68 @@ static const unsigned char fontSens[4564] PROGMEM = {
 
 #define WR_STROBE { WR_ACTIVE; WR_IDLE; }
 
-// Цвета
-#define BLUE   0x00001F
-#define RED    0x00F800
-#define GREEN  0x0007E0
-#define BLACK  0x000000
-#define WHITE  0x00FFFF
+// Colors 16-bit
+#define BLUE   0x001F
+#define RED    0xF800
+#define GREEN  0x07E0
+#define BLACK  0x0000
+#define WHITE  0xFFFF
 
-// Список команд
-#define NOP										0x00
-#define SOFT_RESET								0x01
-#define GET_POWER_MODE							0x0A
-#define GET_ADDRESS_MODE						0x0B
-#define GET_PIXEL_FORMAT						0x0C
-#define GET_DISPLAY_MODE						0x0D
-#define GET_DIAGNOSTIC_RESULT					0x0F
-#define ENTER_SLEEP_MODE						0x10
-#define EXIT_SLEEP_MODE							0x11
-#define ENTER_PARTIAL_MODE						0x12
-#define ENTER_NORMAL_MODE						0x13
-#define EXIT_INVERT_MODE						0x20
-#define ENTER_INVERT_MODE						0x21
-#define SET_DISPLAY_OFF							0x28
-#define SET_DISPLAY_ON							0x29
-#define SET_COLUMN_ADDRESS						0x2A
-#define SET_PAGE_ADDRESS						0x2B
-#define WRITE_MEMORY_START						0x2C
-#define READ_MEMORY_START						0x2E
-#define SET_PARTIAL_AREA						0x30
-#define SET_SCROLL_AREA							0x33
-#define SET_TEAR_OFF							0x34
-#define SET_TEAR_ON								0x35
-#define SET_ADDRESS_MODE						0x36
-#define SET_SCROLL_START						0x37
-#define EXIT_IDLE_MODE							0x38
-#define ENTER_IDLE_MODE							0x39
-#define SET_PIXEL_FORMAT						0x3A
-#define WRITE_MEMORY_CONTINUE					0x3C
-#define READ_MEMORY_CONTINUE					0x3E
-#define SET_TEAR_SCANLINE						0x44
-#define GET_SCANLINE							0x45
-#define READ_DDB_START							0xA1
-#define COMMAND_ACCESS_PROTECT					0xB0
-#define LOW_POWER_MODE_CONTROL					0xB1
-#define FRAME_MEMACC_AND_INTERFACE_SETTING		0xB3
+// Command registers
+#define NOP																			0x00
+#define SOFT_RESET															0x01
+#define GET_POWER_MODE													0x0A
+#define GET_ADDRESS_MODE												0x0B
+#define GET_PIXEL_FORMAT												0x0C
+#define GET_DISPLAY_MODE												0x0D
+#define GET_DIAGNOSTIC_RESULT										0x0F
+#define ENTER_SLEEP_MODE												0x10
+#define EXIT_SLEEP_MODE													0x11
+#define ENTER_PARTIAL_MODE											0x12
+#define ENTER_NORMAL_MODE												0x13
+#define EXIT_INVERT_MODE												0x20
+#define ENTER_INVERT_MODE												0x21
+#define SET_DISPLAY_OFF													0x28
+#define SET_DISPLAY_ON													0x29
+#define SET_COLUMN_ADDRESS											0x2A
+#define SET_PAGE_ADDRESS												0x2B
+#define WRITE_MEMORY_START											0x2C
+#define READ_MEMORY_START												0x2E
+#define SET_PARTIAL_AREA												0x30
+#define SET_SCROLL_AREA													0x33
+#define SET_TEAR_OFF														0x34
+#define SET_TEAR_ON															0x35
+#define SET_ADDRESS_MODE												0x36
+#define SET_SCROLL_START												0x37
+#define EXIT_IDLE_MODE													0x38
+#define ENTER_IDLE_MODE													0x39
+#define SET_PIXEL_FORMAT												0x3A
+#define WRITE_MEMORY_CONTINUE										0x3C
+#define READ_MEMORY_CONTINUE										0x3E
+#define SET_TEAR_SCANLINE												0x44
+#define GET_SCANLINE														0x45
+#define READ_DDB_START													0xA1
+#define COMMAND_ACCESS_PROTECT									0xB0
+#define LOW_POWER_MODE_CONTROL									0xB1
+#define FRAME_MEMACC_AND_INTERFACE_SETTING			0xB3
 #define DISPMODE_AND_FRAMEMEM_WRITEMODE_SETTING 0xB4
-#define DEVICE_CODE_READ						0xBF
-#define PANNEL_DRIVING_SETTING					0xC0
-#define DISP_TIMESET_NORMMODE					0xC1
-#define DISP_TIMESET_PARTIALMODE				0xC2
-#define DISP_TIMESET_IDLEMODE					0xC3
-#define FRAME_RATE_AND_INVERSCONTROL			0xC5
-#define INTERFACE_CONTROL						0xC6
-#define GAMMA_SETTING							0xC8
-#define POWER_SETTING							0xD0
-#define VCOM_CONTROL							0xD1
-#define POWERSET_NORMMODE						0xD2
-#define POWERSET_PARTIALMODE					0xD3
-#define POWERSET_IDLEMODE						0xD4
-#define NV_MEMORY_WRITE							0xE0
-#define NV_MEMORY_CONTROL						0xE1
-#define NV_MEMORY_STATUS_READ					0xE2
-#define NV_MEMORY_PROTECTION					0xE3
+#define DEVICE_CODE_READ												0xBF
+#define PANNEL_DRIVING_SETTING									0xC0
+#define DISP_TIMESET_NORMMODE										0xC1
+#define DISP_TIMESET_PARTIALMODE								0xC2
+#define DISP_TIMESET_IDLEMODE										0xC3
+#define FRAME_RATE_AND_INVERSCONTROL						0xC5
+#define INTERFACE_CONTROL												0xC6
+#define GAMMA_SETTING														0xC8
+#define POWER_SETTING														0xD0
+#define VCOM_CONTROL														0xD1
+#define POWERSET_NORMMODE												0xD2
+#define POWERSET_PARTIALMODE										0xD3
+#define POWERSET_IDLEMODE												0xD4
+#define NV_MEMORY_WRITE													0xE0
+#define NV_MEMORY_CONTROL												0xE1
+#define NV_MEMORY_STATUS_READ										0xE2
+#define NV_MEMORY_PROTECTION										0xE3
 
 uint16_t TFTLCD_ILI9481_init(void);
 void TFTLCD_ILI9481_write_command(uint8_t cmd);
@@ -464,7 +462,7 @@ uint16_t TFTLCD_ILI9481_graph_get_color16(uint8_t r, uint8_t g, uint8_t b);
 void TFTLCD_ILI9481_graph_print_char(int16_t x, int16_t y, unsigned char c, uint16_t color, uint16_t bg, uint8_t typeFont);
 void TFTLCD_ILI9481_graph_print_str(int16_t x, int16_t y, char *text, uint16_t color, uint16_t bg, uint8_t typeFont);
 void TFTLCD_ILI9481_graph_print_int(int32_t num, int16_t x, int16_t y, uint16_t color, uint16_t bg, uint8_t typeFont);
-uint16_t TFTLCD_ILI9481_graph_print_float_format(double num, uint8_t accuracy, int16_t x, int16_t y, uint16_t color, uint16_t bg, uint8_t typeFont, uint16_t prevLen, uint8_t leftOrRight);
+uint16_t TFTLCD_ILI9481_graph_print_float(double num, uint8_t dec, int16_t x, int16_t y, uint16_t color, uint16_t bg, uint8_t typeFont, uint16_t prevLen, uint8_t leftOrRight);
 uint16_t TFTLCD_ILI9481_graph_print_int_format(int32_t num, int16_t x, int16_t y, uint16_t color, uint16_t bg, uint8_t typeFont, uint16_t prevLen, uint8_t leftOrRight);
 uint16_t TFTLCD_ILI9481_graph_print_str_format(int16_t x, int16_t y, char *str, uint16_t color, uint16_t bg, uint8_t typeFont, uint16_t prevLen, uint8_t leftOrRight);
 uint8_t TFTLCD_ILI9481_getCountCharsInNum(int32_t num);
