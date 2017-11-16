@@ -14,21 +14,21 @@
 
 #define DATA_INTERFACE_4_OR_8_BIT  0 // 0 -> 4 bit, 1 -> 8 bit
 
-#define CLEAR_DISP								0x01
-#define RETURN_CURSOR_HOME_DISP					0x02
-#define ENTRY_MODE_DECRADDR_NOSHIFT_DISP		0x04
-#define ENTRY_MODE_INCRADDR_NOSHIFT_DISP		0x06
-#define ENTRY_MODE_SHIFTRIGHT_DISP				0x05
-#define ENTRY_MODE_SHIFTLEFT_DISP				0x07
-#define DISP_ON_NO_CURSORS						0x0C
-#define DISP_ON_WITH_CURSOR_DOWN				0x0E
-#define DISP_ON_WITH_CURSOR_DOWN_BLINK			0x0F
-#define DISP_ON_WITH_CURSOR_FULL_BLINK			0x0D
-#define DISP_OFF								0x08
-#define CURSOR_SHIFT_LEFT						0x10
-#define CURSOR_SHIFT_RIGHT						0x14
-#define DISP_SHIFT_LEFT							0x18
-#define DISP_SHIFT_RIGHT						0x1C
+#define CLEAR_DISP	0x01
+#define RETURN_CURSOR_HOME_DISP	0x02
+#define ENTRY_MODE_DECRADDR_NOSHIFT_DISP 0x04
+#define ENTRY_MODE_INCRADDR_NOSHIFT_DISP 0x06
+#define ENTRY_MODE_SHIFTRIGHT_DISP	0x05
+#define ENTRY_MODE_SHIFTLEFT_DISP	0x07
+#define DISP_ON_NO_CURSORS	0x0C
+#define DISP_ON_WITH_CURSOR_DOWN	0x0E
+#define DISP_ON_WITH_CURSOR_DOWN_BLINK	0x0F
+#define DISP_ON_WITH_CURSOR_FULL_BLINK	0x0D
+#define DISP_OFF	0x08
+#define CURSOR_SHIFT_LEFT	0x10
+#define CURSOR_SHIFT_RIGHT 0x14
+#define DISP_SHIFT_LEFT	0x18
+#define DISP_SHIFT_RIGHT 0x1C
 #define DATA_INTERFACE_DISP_4BIT_ONELINE_5x8	0x20
 #define DATA_INTERFACE_DISP_4BIT_TWOLINE_5x8	0x28
 #define DATA_INTERFACE_DISP_4BIT_ONELINE_5x11	0x24
@@ -37,8 +37,8 @@
 #define DATA_INTERFACE_DISP_8BIT_TWOLINE_5x8	0x38
 #define DATA_INTERFACE_DISP_8BIT_ONELINE_5x11	0x34
 #define DATA_INTERFACE_DISP_8BIT_TWOLINE_5x11	0x3C
-#define SET_AC_DDRAM							0x80
-#define SET_AC_CGRAM							0x40
+#define SET_AC_DDRAM	0x80
+#define SET_AC_CGRAM	0x40
 
 #define E_PIN_STROBE() { GATE_PORT |= (1 << E_PIN); _delay_us(5); GATE_PORT &= ~(1 << E_PIN); _delay_us(5); }
 #define RS_PIN_CMD() { GATE_PORT &= ~(1 << RS_PIN); }
@@ -58,7 +58,7 @@ void preset(void) {
 
 void LCD_HD44780_write8(unsigned char mByte) {
 	if (DATA_INTERFACE_4_OR_8_BIT != 0 && DATA_INTERFACE_4_OR_8_BIT != 1) return;
-	
+
 	if (DATA_INTERFACE_4_OR_8_BIT == 0) {
 		RW_PIN_WRITE();
 		DATA_PORT = (mByte >> 4);
@@ -161,7 +161,7 @@ int main(void)
 	LCD_HD44780_set_cursor_position(0, 1);
 
 	char c = 0;
-	while (1) 
+	while (1)
     {
 		LCD_HD44780_data_write(c++);
 		LCD_HD44780_set_cursor_position(0, 1);
