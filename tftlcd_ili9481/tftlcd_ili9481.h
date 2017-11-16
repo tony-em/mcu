@@ -20,7 +20,7 @@
 #define PRINT_DIR_LEFT_TO_RIGHT 0
 #define PRINT_DIR_RIGHT_TO_LEFT 1
 
-// Øðèôòû
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 // SixteenSeg_40x60 - speed and gear - type1
 static const unsigned char fontSpAndG[3004] PROGMEM = {
 	0x28,0x3C,0x30,0x0A,
