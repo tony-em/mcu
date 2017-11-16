@@ -1,12 +1,7 @@
 #include "tftlcd_ili9481.h"
 
-uint16_t x_size,
-		 y_size;
-
-uint8_t fontSizeX_px,
-		fontSizeY_px,
-		fontOffset,
-		fontCharnums;
+uint16_t x_size, y_size;
+uint8_t fontSizeX_px, fontSizeY_px, fontOffset, fontCharnums;
 
 void TFTLCD_ILI9481_preset(void)
 {
